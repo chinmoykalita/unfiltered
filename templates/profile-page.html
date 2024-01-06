@@ -1,0 +1,175 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block style %}
+.profile_image{
+width: 200px;
+height: 200px;
+border-radius: 50%;
+border: 0.5px solid #ececedd1;
+}
+
+.profile{
+display: flex;
+justify-content: center;
+align-items: center;
+flex-direction: column;
+border: .3px solid #a7a0a03d;
+padding: .5rem
+}
+.post_section{
+margin-top: 1rem;
+}
+#followbtn{
+margin: .5rem;
+color: blue;
+}
+#followbtn:hover{
+cursor: pointer
+}
+{% endblock style %}
+
+{% block body %}
+<div class="container mt-4">
+    <div class="profile">
+        <img src="/media/{{profile.profile_image}}" class="profile_image" alt="profile">
+        <div style="display: flex; flex-direction: column; align-items: center;">
+            <div style="display: flex; align-items: center;">
+                <h3 class="text-black">@{{profile.username}}</h3>
+                {% if not current_user %}
+                {% if request.user.is_authenticated %}
+                {% if is_followed %}
+                <p id="followbtn">Unfollow</p>
+                {% else %}
+                <p id="followbtn">Follow</p>
+                {% endif %}
+                {% else %}
+                <p onClick="location.href ='/accounts/userlogin'" id="followbtn">Follow</a>
+                    {% endif %}
+               
+                {% endif %}
+            </div>
+
+            <p class="text-black">{{profile.first_name}} {{profile.last_name}}</p>
+            <div style="display: flex; ">
+                <div>
+                    <h5 class="text-black"><b id="followerscount">{{followers}}</b> <i>followers</i></h4>
+                </div>
+            </div>
+            {% if current_user %}
+            <div>
+                <button id="editbtn" class='btn btn-success' data-bs-toggle="modal" data-bs-target="#exampleModal">Edit profile</button>
+
+                <!-- Modal -->
+                <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel"
+                    aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <form method="post" action={% url 'edit_profile' %} enctype="multipart/form-data"> {% csrf_token %}
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="exampleModalLabel">Edit Profile</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                        aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <div class="mb-3">
+                                        <label for="formFile" class="form-label">Profile image</label>
+                                        <input name="p_image" value="{{profile.profile_image}}" class="form-control" type="file" id="formFile">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="exampleInputEmail1" class="form-label">First name</label>
+                                        <input name="fname" type="text" value="{{profile.first_name}}"
+                                            class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="exampleInputEmail1" class="form-label">Last name</label>
+                                        <input name="lname" type="text" value="{{profile.last_name}}"
+                                            class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="exampleInputEmail1" class="form-label">Email address</label>
+                                        <input name="email" type="email" value="{{profile.email}}" class="form-control"
+                                            id="exampleInputEmail1" aria-describedby="emailHelp">
+                                        <div id="emailHelp" class="form-text">We'll never share your email with anyone
+                                            else.</div>
+                                    </div>
+                                    <div class="input-group mb-3">
+                                        <span class="input-group-text" id="basic-addon1">@</span>
+                                        <input type="text" class="form-control" placeholder="{{profile.username}}"
+                                            aria-label="Username" aria-describedby="basic-addon1" disabled>
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary"
+                                        data-bs-dismiss="modal">Close</button>
+                                    <button type="submit" class="btn btn-primary">Save changes</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <button onClick='location.href="{% url 'view_analytics' request.user.username %}"' class='btn btn-primary'>View analytics</button>
+            </div>
+            <a href="{% url 'view_bookmarks' request.user.username%}" class="mt-2" style="text-decoration: none; color: tomato;">My bookmarks</a>
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="post_section">
+        <h1 class="text-black">Posts({{no_of_posts}})</h1>
+
+        <div class="row m-2" data-masonry='{"percentPosition": true }'>
+            {% for post in posts %}
+
+            <div class="card mx-2" style="width: 18rem;">
+                <a href="{% url 'view_post' post.id %}"><img src="/media/{{post.image}}" class="card-img-top"
+                        alt="..."></a>
+                <div class="card-body">
+                    <p class="card-text">{{post.title}}</p>
+                </div>
+            </div>
+
+            {% endfor %}
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block js %}
+var followbtn = document.getElementById('followbtn')
+followbtn.addEventListener('click', ()=>{
+
+var mode = followbtn.innerText;
+console.log(mode);
+if(mode==='Follow'){
+
+fetch('/accounts/follow/', {
+method: 'POST',
+body: JSON.stringify({
+"user_id": {{profile.id}}
+}),
+headers: {"Content-type": "application/json; charset=UTF-8"}
+
+}).then((r)=>r.json()).then((res)=>{
+followbtn.innerText = 'Unfollow';
+document.getElementById('followerscount').innerText = res.count;
+})
+
+
+}else if(mode==="Unfollow"){
+console.log(mode)
+fetch('/accounts/unfollow/', {
+method: 'POST',
+body: JSON.stringify({
+"user_id": {{profile.id}}
+}),
+headers: {"Content-type": "application/json; charset=UTF-8"}
+
+}).then((r)=>r.json()).then((res)=>{
+followbtn.innerText = 'Follow';
+document.getElementById('followerscount').innerText = res.count;
+})
+}
+})
+
+{% endblock js %}

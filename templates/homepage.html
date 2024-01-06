@@ -1,0 +1,129 @@
+{% extends 'base.html' %}
+{% load static %}
+
+
+{% block body  %}
+<div id="myCarousel" class="carousel slide" data-bs-ride="carousel">
+    <div class="carousel-indicators">
+      <button type="button" data-bs-target="#myCarousel" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+      <button type="button" data-bs-target="#myCarousel" data-bs-slide-to="1" aria-label="Slide 2"></button>
+      <button type="button" data-bs-target="#myCarousel" data-bs-slide-to="2" aria-label="Slide 3"></button>
+    </div>
+    <div class="carousel-inner">
+      <div class="carousel-item active">
+        <img class="bd-placeholder-img" style="opacity: 90%" width="100%" height="100%" src="{% static 'images/travifountain.jpg' %}" ></img>
+
+        <div class="container">
+          <div class="carousel-caption text-start">
+            <h1>Example headline.</h1>
+            <p>Some representative placeholder content for the first slide of the carousel.</p>
+            <p><a class="btn btn-lg btn-primary" href="/accounts/register">Sign up today</a></p>
+          </div>
+        </div>
+      </div>
+      <div class="carousel-item">
+        <img class="bd-placeholder-img" style="opacity: 90%" width="100%" height="100%" src="{% static 'images/fashionshow.jpg' %}" ></img>
+
+        <div class="container">
+          <div class="carousel-caption">
+            <h1>Another example headline.</h1>
+            <p>Some representative placeholder content for the second slide of the carousel.</p>
+            <p><a class="btn btn-lg btn-primary" href="/explore">Explore</a></p>
+          </div>
+        </div>
+      </div>
+      <div class="carousel-item">
+        <img class="bd-placeholder-img" style="opacity: 90%" width="100%" height="100%" src="{% static 'images/bowl.jpg' %}" ></img>
+
+        <div class="container">
+          <div class="carousel-caption text-end">
+            <h1>One more for good measure.</h1>
+            <p>Some representative placeholder content for the third slide of this carousel.</p>
+            <p><a class="btn btn-lg btn-primary" href="/explore">Explore Feeds</a></p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <button class="carousel-control-prev" type="button" data-bs-target="#myCarousel" data-bs-slide="prev">
+      <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+      <span class="visually-hidden">Previous</span>
+    </button>
+    <button class="carousel-control-next" type="button" data-bs-target="#myCarousel" data-bs-slide="next">
+      <span class="carousel-control-next-icon" aria-hidden="true"></span>
+      <span class="visually-hidden">Next</span>
+    </button>
+  </div>
+
+  <!-- Marketing messaging and featurettes
+  ================================================== -->
+  <!-- Wrap the rest of the page in another container to center all the content. -->
+
+  <div class="container marketing">
+
+    <!-- Three columns of text below the carousel -->
+    <div class="row">
+      <div class="col-lg-4">
+
+        <h2>Blair Waldorf</h2>
+        <p>There is no definite way of defining art. It is present everywhere and in everything if we wish to see it.  One who ignores the reality and sees beyond the scope of the ordinary can see the actual beauty in things. Although we can’t define art, there are various forms of art. Architecture, painting, sculpture and many more. There are also performing arts like music, film etc.</p>
+      </div><!-- /.col-lg-4 -->
+      <div class="col-lg-4">
+
+        <h2>Chuck Bass</h2>
+        <p>Fashion as defined by many is a form of self expression. It is meant to be a way to showcase yourself using materialistic objects. Everybody’s idea of fashion can be different depending upon their taste and various other factors. Fashion is a vast concept and its essence depends on what we perceive of it. </p>
+      </div><!-- /.col-lg-4 -->
+      <div class="col-lg-4">
+
+        <h2>Nate Archibald</h2>
+        <p>Apart from being one of our basic necessities food is also a luxury. It represents people, culture, nations etc. We all know how important food is for our survival. People take pride in their food and it also brings people together. Food also holds a lot of memories for people. It is something we all have in common. Food is a lot of more than something which gives us energy to keep our day going it is something which makes life worth living. </p>
+      </div><!-- /.col-lg-4 -->
+    </div><!-- /.row -->
+
+
+    <!-- START THE FEATURETTES -->
+
+    <hr class="featurette-divider">
+
+    <div class="row featurette">
+      <div class="col-md-7">
+        <h2 class="featurette-heading">Health and Fitness <span class="text-muted"></span></h2>
+        <p class="lead">Health is a very important aspect in the life of everyone. Nothing is more important than health and fitness for any human being. Healthy and fit people really enjoy their life very happily and peacefully. An unhealthy person cannot enjoy life in full extent. He/she cannot enjoy eating, watching sports, or other luxury of the life. It is truly said by our elders that health is wealth. In order to maintain good health we need to properly take care of the hygiene and sanitation all around us. We have to eat healthy and complete food in timely manner.</p>
+      </div>
+      <div class="col-md-5">
+        {% comment %} <svg class="bd-placeholder-img bd-placeholder-img-lg featurette-image img-fluid mx-auto" width="500" height="500" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: 500x500" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title><rect width="100%" height="100%" fill="#eee"/><text x="50%" y="50%" fill="#aaa" dy=".3em">500x500</text></svg> {% endcomment %}
+        <img class="bd-placeholder-img" style="opacity: 90%" width="100%" height="100%" src="{% static 'images/workout.jpg' %}" ></img>
+
+      </div>
+    </div>
+
+    <hr class="featurette-divider">
+
+    <div class="row featurette">
+      <div class="col-md-7 order-md-2">
+        <h2 class="featurette-heading">Travel, <span class="text-muted">It opens our minds and broadens our worldviews.</span></h2>
+        <p class="lead">That’s because travel allows us to meet new people, experience new cultures and understand new ways of life. Travelling is an amazing way to learn a lot of things in life. A lot of people around the world travel every year to many places. Moreover, it is important to travel to humans. Some travel to learn more while some travel to take a break from their life. No matter the reason, travelling opens a big door for us to explore the world beyond our imagination .Travelling refreshes our mind.</p>
+      </div>
+      <div class="col-md-5 order-md-1">
+        <img class="bd-placeholder-img" style="opacity: 90%" width="100%" height="100%" src="{% static 'images/passportmap.jpg' %}" ></img>
+      </div>
+    </div>
+
+    <hr class="featurette-divider">
+
+    <div class="row featurette">
+      <div class="col-md-7">
+        <h2 class="featurette-heading">And lastly, this one. <span class="text-muted">Sports.</span></h2>
+        <p class="lead">Sports help build the character and personality of a person. It certainly is an excellent tool to keep the body physically fit. Most noteworthy, the benefits of Sports are so many that books can be written.  Sports have a massive positive effect on both the mind and body. The game is the easiest and easy way for a very good physical and mental exercise. It is useful for the country as well as with personal growth and development. We can not always ignore the benefits and importance of playing regularly. The game provides a good feeling to a person and inspires to lead a healthy life. It keeps us always healthy and healthy and keeps away from the problems of drug addiction, crime and disorders.</p>
+      </div>
+      <div class="col-md-5">
+        <img class="bd-placeholder-img" style="opacity: 90%" width="100%" height="100%" src="{% static 'images/football.jpg' %}" ></img>
+
+      </div>
+    </div>
+
+    <hr class="featurette-divider">
+
+    <!-- /END THE FEATURETTES -->
+
+  </div><!-- /.container -->
+{% endblock  %}

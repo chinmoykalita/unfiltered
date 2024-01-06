@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block style %}
+{% endblock %}
+{% block body %}
+<div class="container">
+    <H2 class="text-black mt-4">My Bookmarks</H2>
+    {% if lenb == 0 %}
+    <h3>You don't have any bookmarks yet.</h3>
+    {% else %}
+
+    <div class="row mx-4 mt-2" data-masonry='{"percentPosition": true }'>
+        {% for post in bookmarks %}
+      
+          <div class="card mx-2" style="width: 18rem;">
+              <a href="{% url 'view_post' post.id %}"><img src="/media/{{post.image}}" class="card-img-top" alt="..."></a>
+              <div class="card-body">
+              <p class="card-text">{{post.title}}</p>
+              </div>
+          </div>
+      
+          {% endfor %}
+      </div>
+
+
+    {% endif %}
+</div>
+
+{% endblock body %}

@@ -1,0 +1,190 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block extraheads %}
+    <link rel="stylesheet" href="{% static 'css/normalize.css' %}">
+    <link rel="stylesheet" href="{% static 'css/pin_styles.css' %}">
+    <link rel="stylesheet" href="{% static 'css/modal_styles.css' %}">
+    <link rel="stylesheet" href="{% static 'css/final_board.css' %}">
+{% endblock extraheads %}
+{% block body %}
+
+
+<div class="navigation_bar">
+    <div class="pint_mock_icon_container add_pin">
+        <img src="{% static 'icons/add.png' %}" alt="add_pin" class="pint_mock_icon">
+    </div>
+</div>
+
+<div class="tags d-flex m-4">
+    {% for tag in tags %}
+    <h3 class='m-2'><a href="tag/{{tag.name}}"><span class="badge rounded-pill bg-warning text-dark">{{tag.name}}</span></a></h3>
+    {% endfor %}
+</div>
+
+
+<div class="row" data-masonry='{"percentPosition": true }'>
+    {% for post in posts %}
+
+    <div class="card" style="width: 18rem;">
+        <a href="{% url 'view_post' post.id %}"><img src="/media/{{post.image}}" class="card-img-top" alt="..."></a>
+        <div class="card-body">
+        <p class="card-text">{{post.title}}</p>
+        </div>
+    </div>
+
+    {% endfor %}
+</div>
+
+
+
+
+<div class="pin_container"></div>
+
+<div class="add_pin_modal">
+    <form method="post" action="{% url 'add_post' %}" enctype="multipart/form-data"> {% csrf_token %}
+        <div class="add_pin_container">
+            <div class="side" id="left_side">
+                <div class="section1">
+                    <div class="pint_mock_icon_container">
+                        <img src="{% static 'icons/ellipse.png' %}" alt="edit" class="pint_mock_icon">
+                    </div>
+                </div>
+
+                <div class="section2">
+                    <label for="upload_img" id="upload_img_label">
+                        <div class="upload_img_container">
+                            <div id="dotted_border">
+                                <div class="pint_mock_icon_container">
+                                    <img src="{% static 'icons/up-arrow.png' %}" alt="upload_img" class="pint_mock_icon">
+                                </div>
+                                <div>Click to upload</div>
+                                <div>Recommendation: Use high-quality .jpg files less than 20MB</div>
+                            </div>
+                        </div>
+                        <input type="file" name="image" id="upload_img">
+                    </label>
+
+                    <div class="modals_pin">
+                        <div class="pin_image">
+                            <!-- <img src="" alt="pin_image"> -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- <div class="section3">
+                    <div class="save_from_site">Save From Site</div>
+                </div> -->
+            </div>
+
+            <div class="side" id="right_side">
+                <div class="section1">
+                    <div class="select_size">
+                        <button type="submit" class="save_pin">Save</button>
+                    </div>
+                </div>
+
+                <div class="section2">
+                    <input placeholder="Add your title" name="title" type="text" class="new_pin_input" id="pin_title">
+                    <textarea placeholder="Tell everyone what your Pin is about" name="text" class="new_pin_input" id="pin_description"></textarea>
+                    <input placeholder="Add tags" type="text" name="tags" class="new_pin_input" id="pin_destination">
+                    <p>seperate your tags with comma</p>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
+
+<br><br>
+
+<!-- <main class="container py-5">
+    
+    <div class="row" data-masonry='{"percentPosition": true }'>
+        <div class="col-sm-6 col-lg-4 mb-4">
+            <div class="card">
+                <svg class="bd-placeholder-img card-img-top" width="100%" height="200" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Image cap" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title><rect width="100%" height="100%" fill="#868e96"/><text x="50%" y="50%" fill="#dee2e6" dy=".3em">Image cap</text></svg>
+                
+                <div class="card-body">
+                    <h5 class="card-title">Card title that wraps to a new line</h5>
+                    <p class="card-text">This is a longer card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6 col-lg-4 mb-4">
+            <div class="card p-3">
+                <figure class="p-3 mb-0">
+            <blockquote class="blockquote">
+                <p>A well-known quote, contained in a blockquote element.</p>
+            </blockquote>
+            <figcaption class="blockquote-footer mb-0 text-muted">
+                Someone famous in <cite title="Source Title">Source Title</cite>
+            </figcaption>
+        </figure>
+    </div>
+</div>
+<div class="col-sm-6 col-lg-4 mb-4">
+    <div class="card">
+        <svg class="bd-placeholder-img card-img-top" width="100%" height="200" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Image cap" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title><rect width="100%" height="100%" fill="#868e96"/><text x="50%" y="50%" fill="#dee2e6" dy=".3em">Image cap</text></svg>
+    
+        <div class="card-body">
+            <h5 class="card-title">Card title</h5>
+            <p class="card-text">This card has supporting text below as a natural lead-in to additional content.</p>
+            <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
+          </div>
+        </div>
+    </div>
+    <div class="col-sm-6 col-lg-4 mb-4">
+        <div class="card bg-primary text-white text-center p-3">
+            <figure class="mb-0">
+                <blockquote class="blockquote">
+                    <p>A well-known quote, contained in a blockquote element.</p>
+                </blockquote>
+            <figcaption class="blockquote-footer mb-0 text-white">
+              Someone famous in <cite title="Source Title">Source Title</cite>
+            </figcaption>
+        </figure>
+        </div>
+      </div>
+      <div class="col-sm-6 col-lg-4 mb-4">
+          <div class="card text-center">
+              <div class="card-body">
+                  <h5 class="card-title">Card title</h5>
+                  <p class="card-text">This card has a regular title and short paragraph of text below it.</p>
+                  <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
+          </div>
+        </div>
+    </div>
+    <div class="col-sm-6 col-lg-4 mb-4">
+        <div class="card">
+            <svg class="bd-placeholder-img card-img" width="100%" height="260" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Card image" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title><rect width="100%" height="100%" fill="#868e96"/><text x="50%" y="50%" fill="#dee2e6" dy=".3em">Card image</text></svg>
+            
+        </div>
+    </div>
+    <div class="col-sm-6 col-lg-4 mb-4">
+        <div class="card p-3 text-end">
+            <figure class="mb-0">
+                <blockquote class="blockquote">
+                    <p>A well-known quote, contained in a blockquote element.</p>
+                </blockquote>
+                <figcaption class="blockquote-footer mb-0 text-muted">
+                    Someone famous in <cite title="Source Title">Source Title</cite>
+                </figcaption>
+            </figure>
+        </div>
+    </div>
+    <div class="col-sm-6 col-lg-4 mb-4">
+        <div class="card">
+          <div class="card-body">
+            <h5 class="card-title">Card title</h5>
+            <p class="card-text">This is another card with title and supporting text below. This card has some additional content to make it slightly taller overall.</p>
+            <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
+        </div>
+    </div>
+      </div>
+    </div>
+    
+</main> -->
+
+<script src="{% static 'js/final_board.js' %}"></script>
+<script src="https://cdn.jsdelivr.net/npm/masonry-layout@4.2.2/dist/masonry.pkgd.min.js" integrity="sha384-GNFwBvfVxBkLMJpYMOABq3c+d3KnQxudP/mGPkzpZSTYykLBNsZEnG2D9G/X/+7D" crossorigin="anonymous" async></script>
+{% endblock body  %}

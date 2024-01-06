@@ -1,0 +1,249 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block style %}
+.content{
+  width: 50vw;
+}
+.sidebar{
+  padding: 2rem;
+}
+.title > h1{
+  font-size: 42px;
+  color: black;
+}
+.content{
+  align-self: start;
+  justify-self: center;
+}
+.profile_image{
+  height: 3rem;
+  width: 3rem;
+  border-radius: 3rem
+}
+.comments{
+  margin-top: 4rem;
+  color: black;
+}
+.comments input{
+  width: 20rem;
+  height: 3rem;
+  padding: 4px;
+  border-radius: 2rem;
+  border: .7px solid rgba(0, 0, 0, 0.288)
+}
+.comments input:focus{
+  outline-color:rgba(0, 0, 0, 0.288)
+}
+.comments button{
+  margin-left: 1rem;
+  border-radius: 8px;
+  padding: 0 1rem;
+  border: .7px solid rgba(0, 0, 0, 0.288)
+
+}
+.comment_box{
+  display: flex;
+  margin-top: 1rem;
+  width: 100%;
+}
+.box{
+  border: .2px solid rgba(0, 0, 0, 0.267);
+  padding: 10px;
+  border-radius: 1rem;
+  margin-left: 4px;
+  width: 100%;
+}
+.comment-wrap {
+  background-color: #fdfdfd;
+  height: 400px;
+  width: 100%;
+  border-radius: 6px;
+  box-shadow: 0 4px 28px rgba(123,151,158,.25);
+  border: 1px solid #d6dee1;
+  padding: 1rem;
+  overflow: scroll;
+  margin-top:1rem
+}
+/* custom scrollbar */
+::-webkit-scrollbar {
+  width: 20px;
+}
+
+::-webkit-scrollbar-track {
+  background-color: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: #d6dee1;
+  border-radius: 20px;
+  border: 6px solid transparent;
+  background-clip: content-box;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background-color: #a8bbbf;
+}
+
+#likebtn:hover{
+  cursor: pointer;
+}
+#bookmarkbtn:hover{
+  cursor: pointer;
+}
+
+
+{% endblock style %}
+{% block body %}
+
+<div class="row">
+  <div class="col card content">
+      <div class="card-body d-flex justify-content-center">
+        <img src="/media/{{post.image}}" class="card-img-top" style="height:25rem; object-fit: contain;"></img>
+      </div>
+  </div>
+
+  <div class="col-md-auto sidebar">
+    <div class="d-flex justify-content-between actions">
+
+      <div style="display: flex; font-size: 1.6rem;">
+        <i class="fa-heart" id="likebtn" style="color: rgba(216, 66, 66, 0.89);" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Like"></i>
+        <p id="likecount">({{post.likecount}})</p>        
+      </div>
+
+      <i class="far fa-bookmark" style="font-size: 1.6rem; color: rgba(216, 66, 66, 0.89);" id="bookmarkbtn" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Bookmark"></i>
+      <!-- <i class="fas fa-bookmark" style="font-size: 1.6rem; color: rgba(216, 66, 66, 0.89);"></i> -->
+    </div>
+    <div class="title">
+      {% for tag in post.tags.all %}<span class="badge bg-light text-dark mx-1">{{tag.name}}</span>{% endfor %}
+      <h1>{{post.title}}</h1>
+      <p>{{post.text}}</p>
+      <p>Published on {{post.date_posted.date}}</p>
+    </div>
+    <div class="d-flex justify-content-between mt-3 creator">
+      <div class="d-flex">
+        <a href="/{{creator.username}}"><img src="/media/{{creator.profile_image}}" class="profile_image" alt="..."></a>
+        <div class="mx-2">
+          <a style="color: black; text-decoration: none;" href="/{{creator.username}}"><b>{{creator.first_name}} {{creator.lastname}}</b></a><br>
+          <i>@{{creator.username}}</i>
+        </div>
+      </div>
+    </div>
+    <div class="comments">
+      <h2>Comments({{comment_count}})</h2>
+      {% if request.user.is_authenticated %}
+      <form method="post" action="{% url 'add_comment' %}" class="d-flex"> {% csrf_token %}
+        <input type="hidden" name="post_id" value="{{post.id}}">
+        <input type="text" name="comment" placeholder="Add a comment">
+        <button type="submit">Add</button>
+      </form>
+      {% endif %}
+
+      <div class="comment-wrap custom-scrollbar">
+        {% for comment in comments %}
+        <div class="comment_box">
+          <a href="/{{comment.user.username}}"><img src="/media/{{comment.user.profile_image}}" class="profile_image" alt="user"></a>
+          <div class="box">
+            <a style="color: black; text-decoration: none;" href="/{{comment.user.username}}"><b>{{comment.user.first_name}}</b></a>
+            <div>{{comment.content}}</div>
+          </div>
+        </div>
+        {% endfor %}
+
+      </div>
+
+      
+    </div>
+  </div>
+
+</div>
+<h2 class="mx-4 mt-4">Related Posts</h2>
+<div class="row mx-4 mt-1" data-masonry='{"percentPosition": true }'>
+  {% for post in related_posts %}
+
+    <div class="card mx-2" style="width: 18rem;">
+        <a href="{% url 'view_post' post.id %}"><img src="/media/{{post.image}}" class="card-img-top" alt="..."></a>
+        <div class="card-body">
+        <p class="card-text">{{post.title}}</p>
+        </div>
+    </div>
+
+    {% endfor %}
+</div>
+
+{% endblock body %}
+{% block js %}
+var liked
+{% if liked %}
+liked = true;
+{% else %}
+liked = false;
+{% endif %}
+var likebtn = document.getElementById('likebtn');
+if(liked){
+  likebtn.classList.add('fas')
+}else{likebtn.classList.add('far')}
+
+var bm;
+{% if bookmarked %}
+bm = true;
+{% else %}
+bm = false;
+{% endif %}
+var bookmarkbtn = document.getElementById('bookmarkbtn');
+if(bm){
+  bookmarkbtn.classList.add('fas')
+}else{bookmarkbtn.classList.add('far')}
+
+
+
+
+likebtn.addEventListener('click', ()=>{
+    fetch('/like_post/', {
+      method: 'POST',
+      body: JSON.stringify({
+        "post_id": {{post.id}}
+        }),
+      headers: {"Content-type": "application/json; charset=UTF-8"}
+
+  }).then((r)=>r.json()).then((res)=>{
+    if(res.is_liked){
+      likebtn.classList.remove('far');
+      likebtn.classList.add('fas');
+      document.getElementById('likecount').innerText = `(${res.count})`;
+    }else{
+      likebtn.classList.remove('fas');
+      likebtn.classList.add('far');
+      document.getElementById('likecount').innerText = `(${res.count})`;
+
+    }
+
+  })
+})
+
+bookmarkbtn.addEventListener('click', ()=>{
+    fetch('/toggle_bookmark/', {
+      method: 'POST',
+      body: JSON.stringify({
+        "post_id": {{post.id}}
+        }),
+      headers: {"Content-type": "application/json; charset=UTF-8"}
+
+  }).then((r)=>r.json()).then((res)=>{
+    if(res.bookmarked){
+      bookmarkbtn.classList.remove('far');
+      bookmarkbtn.classList.add('fas');
+    }else{
+      bookmarkbtn.classList.remove('fas');
+      bookmarkbtn.classList.add('far');
+
+    }
+
+  })
+})
+
+
+
+
+
+{% endblock js %}
